@@ -2,29 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WebXR VPS Localization</title>
+    <title>WebXR VPS Demo</title>
+    <script type="module" src="main.js"></script>
     <style>
         body {
             margin: 0;
             overflow: hidden;
         }
 
-        canvas {
-            display: block;
-        }
-
         #startButton {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            z-index: 1;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 14px 24px;
+            background: #007bff;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <button id="startButton">Start AR</button>
-    <script type="module" src="main.js"></script>
 </body>
 </html>

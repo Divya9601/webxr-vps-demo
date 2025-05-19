@@ -1,9 +1,11 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.152.2';
 
-let scene, camera, renderer, session;
+let scene, camera, renderer, session, glBinding;
 let hasLocalized = false;
 
-document.getElementById('startButton').addEventListener('click', async () => {
+const startButton = document.getElementById('startButton');
+
+startButton.addEventListener('click', async () => {
     if (!navigator.xr) {
         alert("WebXR not supported");
         return;
@@ -23,7 +25,11 @@ function setupThreeJS(xrSession) {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera();
+
     renderer.xr.setSession(xrSession);
+
+    const gl = renderer.getContext();
+    glBinding = new XRWebGLBinding(xrSession, gl);
 
     animate();
 }
@@ -113,15 +119,29 @@ function animate() {
         const intrinsics = getCameraIntrinsics(view.projectionMatrix, viewport);
 
         const gl = renderer.getContext();
-        const cameraTexture = renderer.xr.getCamera(frame).camera.texture;
+
+        const camera = renderer.xr.getCamera(frame);
+        const cameraTexture = glBinding.getCameraImage(camera);
+
+        if (!cameraTexture) {
+            console.warn("Camera texture not available");
+            return;
+        }
 
         const imageBlob = await captureCameraImage(gl, cameraTexture, viewport.width, viewport.height);
 
-        const result = await queryVPS(intrinsics, imageBlob, "MAP_CC3MMTRYKP67", viewport.width, viewport.height);
+        const result = await queryVPS(
+            intrinsics,
+            imageBlob,
+            "MAP_CC3MMTRYKP67", // Replace with your real mapId
+            viewport.width,
+            viewport.height
+        );
 
         if (result && result.position && result.rotation) {
             applyLocalization(result.position, result.rotation);
             hasLocalized = true;
+            console.log("Localization applied.");
         }
 
         renderer.render(scene, camera);
