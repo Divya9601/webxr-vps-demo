@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.skypack.dev/three@0.152.2';
+﻿import * as THREE from 'https://cdn.skypack.dev/three@0.152.2';
 
 let scene, camera, renderer, session, glBinding;
 let hasLocalized = false;
@@ -85,6 +85,10 @@ async function queryVPS(intrinsics, imageBlob, mapId, width, height) {
     formData.append("mapId", mapId);
     formData.append("isRightHanded", "true");
 
+    // ✅ Add client ID and secret here
+    formData.append("client_id", "f67b6749-bf5b-42b5-b8a2-5ec3836503d4");
+    formData.append("client_secret", "3fd6c23ddcdcd6d58f3db3e3688c55a2fb587439a3f1d9f66ae90eb85a9df3a9");
+
     const res = await fetch('https://api.multiset.com/vps/localize', {
         method: 'POST',
         body: formData
@@ -92,6 +96,7 @@ async function queryVPS(intrinsics, imageBlob, mapId, width, height) {
 
     return await res.json();
 }
+
 
 function applyLocalization(position, rotation) {
     const cube = new THREE.Mesh(
