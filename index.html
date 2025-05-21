@@ -34,45 +34,65 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>WebXR Navigation</title>
+    <title>WebXR AR Navigation</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-ar@1.8.2/aframe-ar.min.js"></script>
 </head>
+<body>
+    <a-scene xr-mode-ui="enabled: true"
+             webxr="optionalFeatures: hit-test;"
+             renderer="colorManagement: true;"
+             arjs
+             embedded
+             vr-mode-ui="enabled: false">
+        <!-- Enable WebXR AR -->
+        <a-entity camera
+                  position="0 1.6 0"
+                  raycaster="objects: .clickable"
+                  cursor="fuse: false; rayOrigin: mouse"></a-entity>
 
-<body style="margin: 0; overflow: hidden">
-    <a-scene embedded
-             arjs="sourceType: webcam; debugUIEnabled: false;"
-             vr-mode-ui="enabled: false"
-             renderer="antialias: true; alpha: true">
-        <!-- Camera + Reticle -->
-        <a-entity camera look-controls>
-            <a-entity cursor="fuse: false; rayOrigin: mouse"
-                      raycaster="objects: .clickable"
-                      position="0 0 -1"
-                      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-                      material="color: #00FF00; shader: flat"></a-entity>
-        </a-entity>
+        <!-- Ground -->
+        <a-plane position="0 0 -4"
+                 rotation="-90 0 0"
+                 width="10"
+                 height="10"
+                 color="#ccc"></a-plane>
 
-        <!-- Navigation Targets -->
-        <a-box class="clickable"
-               color="#4CC3D9"
-               position="0 0 -2"
+        <!-- Hotspot box 1 -->
+        <a-box id="target1"
+               class="clickable"
+               color="tomato"
+               position="0 0.3 -3"
                depth="0.3"
                height="0.3"
-               width="0.3"
-               event-set__click="_event: click; _target: #cameraRig; position: 0 0 -2"></a-box>
+               width="0.3"></a-box>
 
-        <a-box class="clickable"
-               color="#FF5733"
-               position="2 0 -3"
+        <!-- Hotspot box 2 -->
+        <a-box id="target2"
+               class="clickable"
+               color="skyblue"
+               position="2 0.3 -3"
                depth="0.3"
                height="0.3"
-               width="0.3"
-               event-set__click="_event: click; _target: #cameraRig; position: 2 0 -3"></a-box>
+               width="0.3"></a-box>
 
-        <!-- Rig to move the camera -->
-        <a-entity id="cameraRig" position="0 0 0"></a-entity>
+        <!-- Rig to move -->
+        <a-entity id="rig" position="0 0 0"></a-entity>
+
+        <!-- Navigation Script -->
+        <script>
+            AFRAME.registerComponent("teleport-on-click", {
+                init: function () {
+                    this.el.addEventListener("click", () => {
+                        const rig = document.querySelector("#rig");
+                        rig.setAttribute("position", this.el.getAttribute("position"));
+                    });
+                },
+            });
+
+            document.querySelectorAll(".clickable").forEach((el) => {
+                el.setAttribute("teleport-on-click", "");
+            });
+        </script>
     </a-scene>
 </body>
 </html>
