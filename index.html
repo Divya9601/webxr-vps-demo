@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,5 +27,52 @@
 </head>
 <body>
     <button id="startButton">Start AR</button>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebXR Navigation</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-ar@1.8.2/aframe-ar.min.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden">
+    <a-scene embedded
+             arjs="sourceType: webcam; debugUIEnabled: false;"
+             vr-mode-ui="enabled: false"
+             renderer="antialias: true; alpha: true">
+        <!-- Camera + Reticle -->
+        <a-entity camera look-controls>
+            <a-entity cursor="fuse: false; rayOrigin: mouse"
+                      raycaster="objects: .clickable"
+                      position="0 0 -1"
+                      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                      material="color: #00FF00; shader: flat"></a-entity>
+        </a-entity>
+
+        <!-- Navigation Targets -->
+        <a-box class="clickable"
+               color="#4CC3D9"
+               position="0 0 -2"
+               depth="0.3"
+               height="0.3"
+               width="0.3"
+               event-set__click="_event: click; _target: #cameraRig; position: 0 0 -2"></a-box>
+
+        <a-box class="clickable"
+               color="#FF5733"
+               position="2 0 -3"
+               depth="0.3"
+               height="0.3"
+               width="0.3"
+               event-set__click="_event: click; _target: #cameraRig; position: 2 0 -3"></a-box>
+
+        <!-- Rig to move the camera -->
+        <a-entity id="cameraRig" position="0 0 0"></a-entity>
+    </a-scene>
 </body>
 </html>
