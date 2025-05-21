@@ -33,69 +33,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>WebXR AR Navigation</title>
+    <meta charset="utf-8">
+    <title>WebXR AR Test</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 </head>
 <body>
     <a-scene webxr="optionalFeatures: hit-test;"
-             renderer="colorManagement: true;"
              xr-mode-ui="enabled: true"
              vr-mode-ui="enabled: false"
              embedded>
-        <!-- Camera -->
-        <a-entity camera
-                  position="0 1.6 0"
-                  cursor="rayOrigin: mouse"
-                  raycaster="objects: .clickable"></a-entity>
-
-        <!-- Ground plane -->
-        <a-plane position="0 0 -4"
-                 rotation="-90 0 0"
-                 width="10"
-                 height="10"
-                 color="#e0e0e0"></a-plane>
-
-        <!-- Teleportable box 1 -->
-        <a-box id="box1"
-               class="clickable"
-               color="tomato"
-               position="0 0.3 -3"
-               depth="0.3"
-               height="0.3"
-               width="0.3"></a-box>
-
-        <!-- Teleportable box 2 -->
-        <a-box id="box2"
-               class="clickable"
-               color="skyblue"
-               position="2 0.3 -3"
-               depth="0.3"
-               height="0.3"
-               width="0.3"></a-box>
-
-        <!-- Camera Rig -->
-        <a-entity id="rig" position="0 0 0"></a-entity>
-
-        <!-- Script to handle teleportation -->
-        <script>
-            AFRAME.registerComponent("teleport-on-click", {
-                init: function () {
-                    this.el.addEventListener("click", () => {
-                        const rig = document.querySelector("#rig");
-                        const pos = this.el.getAttribute("position");
-                        rig.setAttribute("position", pos);
-                    });
-                },
-            });
-
-            // Attach teleport logic to all .clickable objects
-            window.addEventListener("DOMContentLoaded", () => {
-                document.querySelectorAll(".clickable").forEach((el) => {
-                    el.setAttribute("teleport-on-click", "");
-                });
-            });
-        </script>
+        <a-box position="0 1.6 -2" color="#4CC3D9"></a-box>
+        <a-camera></a-camera>
     </a-scene>
 </body>
 </html>
